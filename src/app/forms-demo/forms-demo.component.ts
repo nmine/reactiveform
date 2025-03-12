@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {FormArray, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -12,22 +12,46 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class FormsDemoComponent implements OnInit {
   // Reactive form
-  reactiveForm: FormGroup;
+  myForm: FormGroup;
 
 
   constructor(private formBuilder: FormBuilder) {
-    this.reactiveForm = this.formBuilder.group({
+    const phone = this.formBuilder.group({
+      area: [],
+      prefix: [],
+      line: [],
+    })
+
+    this.myForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      message: ['', Validators.required],
-      career: ['', Validators.required],
+      phones: this.formBuilder.array([])
     });
   }
+
+  get phoneForms() {
+    return this.myForm.get('phones') as FormArray;
+  }
+
+  addPhone(){
+    const phone = this.formBuilder.group({
+      area: [],
+      prefix: [],
+      line: [],
+    })
+    this.phoneForms.push(phone);
+  }
+
+  deletePhone(i: number) {
+    this.phoneForms.removeAt(i);
+  }
+
+
   ngOnInit() {
-    this.reactiveForm.valueChanges.subscribe(value => console.log("form changed"));
+    this.myForm.valueChanges.subscribe(value => console.log("form changed"));
   }
 
   submitReactiveForm() {
-    console.log('Reactive Form Data:', this.reactiveForm.value);
+    console.log('Reactive Form Data:', this.myForm.value);
   }
 }

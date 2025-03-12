@@ -1,7 +1,6 @@
+<form [formGroup]="myForm" (ngSubmit)="submitReactiveForm()">
 
-<form [formGroup]="reactiveForm" (ngSubmit)="submitReactiveForm()">
-
-  Value : {{reactiveForm.value | json}}
+  Value : {{ myForm.value | json }}
 
   <hr>
   <h3>Reactive Form</h3>
@@ -11,8 +10,22 @@
   <label>Email:
     <input type="email" formControlName="email">
   </label>
-  <label>Career:
-    <input type="text" formControlName="career">
-  </label>
+  <h4>Cell Phone</h4>
+  <div formArrayName="phones">
+    <div *ngFor="let phone of phoneForms.controls; let i=index" [formGroupName]="i">
+      <label>area:
+        <input type="text" formControlName="area">
+      </label>
+      <label>prefix:
+        <input type="text" formControlName="prefix">
+      </label>
+      <label>line:
+        <input type="text" formControlName="line">
+      </label>
+      <button type="submit" (click)="deletePhone(i)">supprimer phone</button>
+    </div>
+  </div>
+  <button type="submit" (click)="addPhone()">Ajouter phone</button>
   <button type="submit">Envoyer</button>
+
 </form>
