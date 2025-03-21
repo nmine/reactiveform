@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -13,18 +13,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class FormsDemoComponent implements OnInit {
   // Reactive form
   myForm: FormGroup;
-
+  simpleForm = new FormControl('');
 
   constructor(private formBuilder: FormBuilder) {
-    const phone = this.formBuilder.group({
-      area: [],
-      prefix: [],
-      line: [],
-    })
-
     this.myForm = this.formBuilder.group({
       name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [
+        Validators.required,
+        Validators.email
+      ]],
       phones: this.formBuilder.array([])
     });
   }
@@ -54,4 +51,8 @@ export class FormsDemoComponent implements OnInit {
   submitReactiveForm() {
     console.log('Reactive Form Data:', this.myForm.value);
   }
+  updateSimpleForm() {
+    this.simpleForm.setValue('Nancy');
+  }
+
 }

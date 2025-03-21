@@ -1,7 +1,12 @@
 <form [formGroup]="myForm" (ngSubmit)="submitReactiveForm()">
 
-  Value : {{ myForm.value | json }}
-
+  <p>Value : {{ myForm.value | json }}</p>
+  <p>Value Simple form: {{ simpleForm.value }}</p>
+  <hr>
+  <h3>Simple Form</h3>
+  <label for="name">Name: </label>
+  <input id="name" type="text" [formControl]="simpleForm">
+  <button type="button" (click)="updateSimpleForm()">Update Name</button>
   <hr>
   <h3>Reactive Form</h3>
   <label>Nom:
