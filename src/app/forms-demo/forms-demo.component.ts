@@ -2,11 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { ButtonModule } from 'primeng/button';
+import {Slider} from 'primeng/slider';
+import {DatePicker} from 'primeng/datepicker';
 @Component({
   selector: 'app-forms-demo',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, Slider,DatePicker],
   templateUrl: './forms-demo.component.html',
   styleUrls: ['./forms-demo.component.css']
 })
