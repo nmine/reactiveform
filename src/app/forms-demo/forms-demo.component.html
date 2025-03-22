@@ -1,41 +1,61 @@
-<form [formGroup]="myForm" (ngSubmit)="submitReactiveForm()">
+<div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+  <h2 class="text-2xl font-semibold mb-6 text-gray-800">Simulation d'investissement</h2>
 
-  <p>Value : {{ myForm.value | json }}</p>
-  <p>Value Simple form: {{ simpleForm.value }}</p>
-  <hr>
-  <h3>Simple Form</h3>
-  <label for="name">Name: </label>
-  <input id="name" type="text" [formControl]="simpleForm">
-  <button type="button" (click)="updateSimpleForm()">Update Name</button>
-  <hr>
-  <h3>Reactive Form</h3>
-  <label>Nom:
-    <input type="text" formControlName="name">
-  </label>
-  <label>Email:
-    <input type="email" formControlName="email">
-  </label>
-  <h4>Cell Phone</h4>
-  <div formArrayName="phones">
-    <div *ngFor="let phone of phoneForms.controls; let i=index" [formGroupName]="i">
-      <label>area:
-        <input type="text" formControlName="area">
-      </label>
-      <label>prefix:
-        <input type="text" formControlName="prefix">
-      </label>
-      <label>line:
-        <input type="text" formControlName="line">
-      </label>
-      <button type="submit" (click)="deletePhone(i)">supprimer phone</button>
+  <form [formGroup]="investmentForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+    <!-- Montant investi -->
+    <div>
+      <label class="block mb-2 text-gray-700 font-medium">Montant investi (€)</label>
+      <p-slider
+        formControlName="montantInvesti"
+        [min]="0"
+        [max]="1380"
+        [step]="10"
+        [style]="{ width: '100%' }"
+      ></p-slider>
+      <div class="text-sm text-gray-600 mt-2">
+        Valeur : <strong>{{ investmentForm.get('montantInvesti')?.value }} €</strong>
+      </div>
     </div>
-  </div>
-  <button type="submit" (click)="addPhone()">Ajouter phone</button>
-  <button type="submit">Envoyer</button>
-  <div class="card flex justify-center">
-    <p-button label="Check" />
-  </div>
-  <p-slider formControlName="value" styleClass="w-56" />
-  <p-datepicker formControlName="date" />
 
-</form>
+    <!-- Âge -->
+    <div>
+      <label class="block mb-2 text-gray-700 font-medium" for="age">Âge</label>
+      <input id="age" type="number" formControlName="age"
+             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+    </div>
+
+    <!-- Régime spécial -->
+    <div class="flex items-center gap-3">
+      <p-checkbox formControlName="regimeSpecial" inputId="regimeSpecial"></p-checkbox>
+      <label for="regimeSpecial" class="text-gray-700">Bénéficie d’un régime spécial</label>
+    </div>
+
+    <!-- Branche -->
+    <div>
+      <label class="block mb-2 text-gray-700 font-medium" for="branche">Branche</label>
+      <p-dropdown formControlName="branche"
+                  [options]="branches"
+                  optionLabel="label"
+                  placeholder="Sélectionnez une branche"
+                  class="w-full">
+      </p-dropdown>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded text-blue-800">
+      <p class="text-sm">Rendement estimé :</p>
+      <p class="text-xl font-semibold">{{ rendement | percent:'1.0-0' }}</p>
+    </div>
+
+    <!-- Avantage fiscal calculé -->
+    <div class="bg-gray-100 p-4 rounded-md text-gray-700">
+      <p class="font-medium">Avantage fiscal estimé :</p>
+      <p class="text-lg font-semibold text-green-600">{{ avantageFiscal | number: '1.0-0' }} €</p>
+    </div>
+
+    <button type="submit"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-150">
+      Calculer
+    </button>
+  </form>
+</div>
