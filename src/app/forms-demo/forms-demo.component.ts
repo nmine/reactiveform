@@ -6,6 +6,7 @@ import {SliderModule} from 'primeng/slider';
 import {InputTextModule} from 'primeng/inputtext';
 import {CheckboxModule} from 'primeng/checkbox';
 import {DropdownModule} from 'primeng/dropdown';
+import {RadioButton} from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-forms-demo',
@@ -18,7 +19,8 @@ import {DropdownModule} from 'primeng/dropdown';
     SliderModule,
     InputTextModule,
     CheckboxModule,
-    DropdownModule
+    DropdownModule,
+    RadioButton
   ],
   templateUrl: './forms-demo.component.html',
   styleUrls: ['./forms-demo.component.css']
@@ -26,17 +28,13 @@ import {DropdownModule} from 'primeng/dropdown';
 export class FormsDemoComponent implements OnInit {
   investmentForm: FormGroup;
 
-  branches = [
-    {label: 'Branche 21', value: 21},
-    {label: 'Branche 23', value: 23}
-  ];
-
   constructor(private fb: FormBuilder) {
     this.investmentForm = this.fb.group({
       montantInvesti: [1000, [Validators.required, Validators.max(1380)]],
       age: [35, [Validators.required, Validators.min(18), Validators.max(99)]],
       regimeSpecial: [false],
-      branche: [21, Validators.required]
+      branche: [21, Validators.required],
+      capitalPension : 0,
     });
   }
 
@@ -53,6 +51,10 @@ export class FormsDemoComponent implements OnInit {
   }
 
   get rendement(): number {
+    const montant = this.investmentForm.get('montantInvesti')?.value || 0;
+    return montant < 1050 ? 0.3 : 0.25;
+  }
+  get capitalPension(): number {
     const montant = this.investmentForm.get('montantInvesti')?.value || 0;
     return montant < 1050 ? 0.3 : 0.25;
   }

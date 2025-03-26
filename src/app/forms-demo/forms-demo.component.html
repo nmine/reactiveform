@@ -1,3 +1,7 @@
+<div class="mt-6 bg-gray-100 p-4 rounded text-sm text-gray-700">
+  <h3 class="font-semibold mb-2">Valeur du formulaire :</h3>
+  <pre>{{ investmentForm.value | json }}</pre>
+</div>
 <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
   <h2 class="text-2xl font-semibold mb-6 text-gray-800">Simulation d'investissement</h2>
 
@@ -27,20 +31,25 @@
 
     <!-- Régime spécial -->
     <div class="flex items-center gap-3">
-      <p-checkbox formControlName="regimeSpecial" inputId="regimeSpecial"></p-checkbox>
+      <p-checkbox formControlName="regimeSpecial" [inputId]="'regimeSpecial'" [binary]="true"></p-checkbox>
       <label for="regimeSpecial" class="text-gray-700">Bénéficie d’un régime spécial</label>
     </div>
 
-    <!-- Branche -->
-    <div>
-      <label class="block mb-2 text-gray-700 font-medium" for="branche">Branche</label>
-      <p-dropdown formControlName="branche"
-                  [options]="branches"
-                  optionLabel="label"
-                  placeholder="Sélectionnez une branche"
-                  class="w-full">
-      </p-dropdown>
+    <div class="flex items-center gap-4">
+      <p-radioButton name="branche" [inputId]="'branche21'" value="21" formControlName="branche"></p-radioButton>
+      <label for="branche21">Branche 21</label>
+
+      <p-radioButton name="branche" [inputId]="'branche23'" value="23" formControlName="branche"></p-radioButton>
+      <label for="branche23">Branche 23</label>
     </div>
+<!--      <label class="block mb-2 text-gray-700 font-medium" for="branche">Branche</label>-->
+<!--      <p-dropdown formControlName="branche"-->
+<!--                  [options]="branches"-->
+<!--                  optionLabel="label"-->
+<!--                  placeholder="Sélectionnez une branche"-->
+<!--                  class="w-full">-->
+<!--      </p-dropdown>-->
+<!--    </div>-->
 
     <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded text-blue-800">
       <p class="text-sm">Rendement estimé :</p>
@@ -51,6 +60,11 @@
     <div class="bg-gray-100 p-4 rounded-md text-gray-700">
       <p class="font-medium">Avantage fiscal estimé :</p>
       <p class="text-lg font-semibold text-green-600">{{ avantageFiscal | number: '1.0-0' }} €</p>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded text-red-800">
+      <p class="text-sm">Rendement estimé :</p>
+      <p class="text-xl font-semibold">{{ capitalPension | percent:'1.0-0' }}</p>
     </div>
 
     <button type="submit"
