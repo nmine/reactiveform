@@ -42,14 +42,6 @@
       <p-radioButton name="branche" [inputId]="'branche23'" value="23" formControlName="branche"></p-radioButton>
       <label for="branche23">Branche 23</label>
     </div>
-<!--      <label class="block mb-2 text-gray-700 font-medium" for="branche">Branche</label>-->
-<!--      <p-dropdown formControlName="branche"-->
-<!--                  [options]="branches"-->
-<!--                  optionLabel="label"-->
-<!--                  placeholder="Sélectionnez une branche"-->
-<!--                  class="w-full">-->
-<!--      </p-dropdown>-->
-<!--    </div>-->
 
     <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded text-blue-800">
       <p class="text-sm">Rendement estimé :</p>
@@ -62,14 +54,9 @@
       <p class="text-lg font-semibold text-green-600">{{ avantageFiscal | number: '1.0-0' }} €</p>
     </div>
 
-    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded text-red-800">
-      <p class="text-sm">Rendement estimé :</p>
-      <p class="text-xl font-semibold">{{ capitalPension | percent:'1.0-0' }}</p>
+    <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded text-green-800">
+      <p class="text-sm">Capital estimé à 65 ans (après taxe à 60 ans) :</p>
+      <p class="text-xl font-semibold">{{ capitalFinal65 | number:'1.0-0' }} €</p>
     </div>
-
-    <button type="submit"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-150">
-      Calculer
-    </button>
   </form>
 </div>
