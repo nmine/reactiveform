@@ -1,0 +1,53 @@
+/* Using mostly Tailwind CSS for styling, but adding a few custom styles */
+
+/* Add a subtle hover effect to the product selection buttons */
+button.min-w-\[200px\]:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+/* Custom styling for accordion panels */
+:host ::ng-deep .p-accordion .p-accordion-header-link {
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+:host ::ng-deep .p-accordion .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+/* Style for input number fields */
+:host ::ng-deep .p-inputnumber {
+  width: 100%;
+}
+
+/* Style for slider */
+:host ::ng-deep .p-slider .p-slider-handle {
+  background-color: #3b82f6;
+  border: 2px solid #3b82f6;
+}
+
+:host ::ng-deep .p-slider:not(.p-disabled) .p-slider-handle:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+/* Card styles */
+:host ::ng-deep .p-card {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  :host ::ng-deep .p-inputnumber-buttons-stacked .p-inputnumber-button-group {
+    display: flex;
+  }
+  
+  :host ::ng-deep .p-slider {
+    margin-top: 1rem;
+  }
+} 

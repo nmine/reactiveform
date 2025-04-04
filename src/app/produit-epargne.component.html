@@ -1,0 +1,219 @@
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+  <h1 class="text-3xl font-bold mb-4 text-gray-800">Simulateur d'épargne personnalisé</h1>
+  <p class="text-lg mb-6 text-gray-600">Choisissez vos produits pour simuler vos gains.</p>
+
+  <form [formGroup]="formGroup">
+    <!-- Product Selection Section -->
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700">Produits sélectionnés :</h2>
+      <div class="flex flex-wrap gap-2">
+        <button 
+          *ngFor="let produit of produits"
+          pButton 
+          [class]="isProduitSelected(produit.id) ? 'p-button-primary' : 'p-button-outlined'"
+          (click)="toggleProduit(produit.id)"
+          class="min-w-[200px] p-3 flex items-center justify-center gap-2">
+          <span class="text-xl">{{ produit.icon }}</span>
+          <span>{{ produit.name }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Product Details Section -->
+    <div formGroupName="produitDetails">
+      <!-- Epargne Pension Form -->
+      <p-accordion formGroupName="pension" *ngIf="isProduitSelected('pension')" [activeIndex]="0" class="mb-6">
+        <p-accordionTab header="💰 Epargne pension">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+            <div class="mb-4">
+              <label for="pension-montant" class="block text-sm font-medium text-gray-700 mb-1">Montant investi</label>
+              <p-inputNumber 
+                id="pension-montant"
+                formControlName="montantInvesti"
+                [showButtons]="true" 
+                [min]="0" 
+                [max]="100000"
+                mode="currency" 
+                currency="EUR"
+                class="w-full" 
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+            
+            <div class="mb-4">
+              <label for="pension-age" class="block text-sm font-medium text-gray-700 mb-1">Âge</label>
+              <p-inputNumber 
+                id="pension-age"
+                formControlName="age"
+                [showButtons]="true" 
+                [min]="18" 
+                [max]="65"
+                class="w-full" 
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+            
+            <div class="mb-4">
+              <label for="pension-branche" class="block text-sm font-medium text-gray-700 mb-1">Branche</label>
+              <p-dropdown 
+                id="pension-branche"
+                formControlName="branche"
+                [options]="branches" 
+                optionLabel="label" 
+                optionValue="value"
+                placeholder="Sélectionnez une branche"
+                class="w-full" 
+                [style]="{'width':'100%'}"
+              ></p-dropdown>
+            </div>
+            
+            <div class="mb-4 flex items-center">
+              <p-checkbox 
+                id="pension-regime"
+                formControlName="regimeSpecial"
+                [binary]="true"
+                class="mr-2"
+              ></p-checkbox>
+              <label for="pension-regime" class="text-sm font-medium text-gray-700">Régime spécial</label>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+
+      <!-- Epargne Long Terme Form -->
+      <p-accordion formGroupName="long_terme" *ngIf="isProduitSelected('long_terme')" [activeIndex]="0" class="mb-6">
+        <p-accordionTab header="🏛️ Epargne long terme">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+            <div class="mb-4">
+              <label for="longterme-montant" class="block text-sm font-medium text-gray-700 mb-1">Montant investi</label>
+              <p-inputNumber 
+                id="longterme-montant"
+                formControlName="montantInvesti"
+                [showButtons]="true" 
+                [min]="0" 
+                [max]="500000"
+                mode="currency" 
+                currency="EUR"
+                class="w-full" 
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+            
+            <div class="mb-4">
+              <label for="longterme-duree" class="block text-sm font-medium text-gray-700 mb-1">Durée (années)</label>
+              <p-inputNumber 
+                id="longterme-duree"
+                formControlName="duree"
+                [showButtons]="true" 
+                [min]="1" 
+                [max]="40"
+                class="w-full" 
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+            
+            <div class="mb-4">
+              <label for="longterme-taux" class="block text-sm font-medium text-gray-700 mb-1">Taux d'intérêt (%)</label>
+              <p-inputNumber 
+                id="longterme-taux"
+                formControlName="tauxInteret"
+                [showButtons]="true" 
+                [min]="0" 
+                [max]="10"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                class="w-full" 
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+            
+            <div class="mb-4">
+              <label for="longterme-mensuel" class="block text-sm font-medium text-gray-700 mb-1">Versement mensuel</label>
+              <p-inputNumber 
+                id="longterme-mensuel"
+                formControlName="versementMensuel"
+                [showButtons]="true" 
+                [min]="0" 
+                [max]="10000"
+                mode="currency" 
+                currency="EUR"
+                class="w-full" 
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+
+      <!-- PCLS Form -->
+      <p-accordion formGroupName="pcls" *ngIf="isProduitSelected('pcls')" [activeIndex]="0" class="mb-6">
+        <p-accordionTab header="📊 PCLS">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+            <div class="mb-4">
+              <label for="pcls-montant" class="block text-sm font-medium text-gray-700 mb-1">Montant actuel</label>
+              <p-inputNumber 
+                id="pcls-montant"
+                formControlName="montantActuel"
+                [showButtons]="true" 
+                [min]="0" 
+                [max]="1000000"
+                mode="currency" 
+                currency="EUR"
+                class="w-full" 
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+            
+            <div class="mb-4">
+              <label for="pcls-annees" class="block text-sm font-medium text-gray-700 mb-1">Années avant retraite</label>
+              <p-inputNumber 
+                id="pcls-annees"
+                formControlName="anneeAvantRetraite"
+                [showButtons]="true" 
+                [min]="1" 
+                [max]="40"
+                class="w-full" 
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+            
+            <div class="mb-4">
+              <label for="pcls-pourcentage" class="block text-sm font-medium text-gray-700 mb-1">Pourcentage retraite (%)</label>
+              <p-slider 
+                id="pcls-pourcentage"
+                formControlName="pourcentageRetraite" 
+                [min]="0" 
+                [max]="100"
+                class="w-full mt-2"
+              ></p-slider>
+              <div class="text-center mt-1">{{ formGroup.get('produitDetails')?.get('pcls')?.get('pourcentageRetraite')?.value }}%</div>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+
+    <!-- Summary Section -->
+    <p-card *ngIf="formGroup.get('selectedProduits')?.value?.length > 0" styleClass="mt-8">
+      <ng-template pTemplate="header">
+        <div class="p-4 bg-blue-50 border-b border-blue-200">
+          <h2 class="text-xl font-semibold text-blue-800">Récapitulatif</h2>
+        </div>
+      </ng-template>
+
+      <div class="p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-lg">
+            <span class="text-lg font-medium text-gray-600">Avantage fiscal total :</span>
+            <span class="text-3xl font-bold text-blue-600 mt-2">{{ avantageFiscal | currency:'EUR' }}</span>
+          </div>
+          
+          <div class="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-lg">
+            <span class="text-lg font-medium text-gray-600">Capital estimé à la retraite :</span>
+            <span class="text-3xl font-bold text-green-600 mt-2">{{ capitalEstime | currency:'EUR' }}</span>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </form>
+</div> 
