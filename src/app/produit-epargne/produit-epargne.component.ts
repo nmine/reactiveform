@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { SliderModule } from 'primeng/slider';
 import { AccordionModule } from 'primeng/accordion';
+import {RadioButton} from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-produit-epargne',
@@ -28,7 +29,8 @@ import { AccordionModule } from 'primeng/accordion';
     InputTextModule,
     PanelModule,
     SliderModule,
-    AccordionModule
+    AccordionModule,
+    RadioButton
   ],
   templateUrl: './produit-epargne.component.html',
   styleUrls: ['./produit-epargne.component.css']
@@ -36,7 +38,7 @@ import { AccordionModule } from 'primeng/accordion';
 export class ProduitEpargneComponent implements OnInit {
   // Form groups
   formGroup!: FormGroup;
-  
+
   // Product types
   produits = [
     { id: 'pension', name: 'Epargne pension', icon: '💰' },
@@ -46,11 +48,8 @@ export class ProduitEpargneComponent implements OnInit {
 
   // Dropdown options for sectors
   branches = [
-    { label: 'Finance', value: 'finance' },
-    { label: 'Technologie', value: 'technologie' },
-    { label: 'Santé', value: 'sante' },
-    { label: 'Éducation', value: 'education' },
-    { label: 'Industrie', value: 'industrie' }
+    { label: '21', value: '21' },
+    { label: '23', value: '23' }
   ];
 
   // Calculate summary data
@@ -101,7 +100,7 @@ export class ProduitEpargneComponent implements OnInit {
 
   updateValidators(selectedProducts: string[]): void {
     const produitDetails = this.formGroup.get('produitDetails') as FormGroup;
-    
+
     // Reset all validators
     for (const produit of this.produits) {
       const produitGroup = produitDetails.get(produit.id) as FormGroup;
@@ -112,7 +111,7 @@ export class ProduitEpargneComponent implements OnInit {
         });
       }
     }
-    
+
     // Set validators for selected products
     for (const produitId of selectedProducts) {
       const produitGroup = produitDetails.get(produitId) as FormGroup;
@@ -131,13 +130,13 @@ export class ProduitEpargneComponent implements OnInit {
   toggleProduit(produitId: string): void {
     const currentSelection = [...this.formGroup.get('selectedProduits')?.value || []];
     const index = currentSelection.indexOf(produitId);
-    
+
     if (index > -1) {
       currentSelection.splice(index, 1);
     } else {
       currentSelection.push(produitId);
     }
-    
+
     this.formGroup.get('selectedProduits')?.setValue(currentSelection);
   }
 
@@ -149,20 +148,20 @@ export class ProduitEpargneComponent implements OnInit {
   calculateSummary(): void {
     this.avantageFiscal = 0;
     this.capitalEstime = 0;
-    
+
     const selectedProducts = this.formGroup.get('selectedProduits')?.value || [];
     const produitDetails = this.formGroup.get('produitDetails')?.value || {};
-    
+
     for (const produitId of selectedProducts) {
       const details = produitDetails[produitId];
       if (!details) continue;
-      
+
       switch (produitId) {
         case 'pension':
-          this.avantageFiscal += details.montantInvesti * 0.3; // 30% tax advantage
+          this.avantageFiscal += details.montantInvesti * 12 * this.getRendement(details.montantInvesti) * 65 - details.age; // 30% tax advantage
           this.capitalEstime += details.montantInvesti * Math.pow(1.04, 65 - details.age); // 4% annual return until 65
           break;
-          
+
         case 'long_terme':
           this.avantageFiscal += details.montantInvesti * 0.2; // 20% tax advantage
           // Initial investment + monthly payments with interest
@@ -171,7 +170,7 @@ export class ProduitEpargneComponent implements OnInit {
           this.capitalEstime += details.montantInvesti * Math.pow(1 + monthlyRate, months);
           this.capitalEstime += details.versementMensuel * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
           break;
-          
+
         case 'pcls':
           // No tax advantage for PCLS
           this.capitalEstime += details.montantActuel * Math.pow(1.035, details.anneeAvantRetraite);
@@ -179,9 +178,13 @@ export class ProduitEpargneComponent implements OnInit {
           break;
       }
     }
-    
+
     // Round to 2 decimal places
     this.avantageFiscal = Math.round(this.avantageFiscal);
     this.capitalEstime = Math.round(this.capitalEstime);
   }
-} 
+
+  private getRendement(montantInvesti : number): number {
+    return montantInvesti < 1050 ? 0.3 : 0.25;
+  }
+}
