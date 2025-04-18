@@ -19,9 +19,7 @@
       </div>
     </div>
 
-    <!-- Product Details Section -->
     <div formGroupName="produitDetails">
-      <!-- Epargne Pension Form -->
       <p-accordion formGroupName="pension" *ngIf="isProduitSelected('pension')" [activeIndex]="0" class="mb-6">
         <p-accordionTab header="💰 Epargne pension">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
@@ -56,11 +54,11 @@
             <div class="mb-4">
               <label for="pension-branche" class="block text-sm font-medium text-gray-700 mb-1">Branche</label>
               <div class="flex items-center gap-4" id="pension-branche">
-                <p-radioButton name="branche" [inputId]="'branche21'" value="21" formControlName="branche"></p-radioButton>
-                <label for="branche21">Branche 21</label>
+                <p-radioButton name="pensionBranche"  [inputId]="'pension-branche21'" value="21" formControlName="pensionBranche"></p-radioButton>
+                <label for="pension-branche21">Branche 21</label>
 
-                <p-radioButton name="branche" [inputId]="'branche23'" value="23" formControlName="branche"></p-radioButton>
-                <label for="branche23">Branche 23</label>
+                <p-radioButton name="pensionBranche"  [inputId]="'pension-branche23'" value="23" formControlName="pensionBranche"></p-radioButton>
+                <label for="pension-branche23">Branche 23</label>
               </div>
             </div>
 
@@ -77,66 +75,56 @@
         </p-accordionTab>
       </p-accordion>
 
-      <!-- Epargne Long Terme Form -->
       <p-accordion formGroupName="long_terme" *ngIf="isProduitSelected('long_terme')" [activeIndex]="0" class="mb-6">
         <p-accordionTab header="🏛️ Epargne long terme">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
             <div class="mb-4">
-              <label for="longterme-montant" class="block text-sm font-medium text-gray-700 mb-1">Montant investi</label>
-              <p-inputNumber
-                id="longterme-montant"
+              <label class="block mb-2 text-gray-700 font-medium">Montant investi (€)</label>
+              <p-slider
                 formControlName="montantInvesti"
-                [showButtons]="true"
                 [min]="0"
-                [max]="500000"
-                mode="currency"
-                currency="EUR"
+                [max]="1380"
+                [step]="10"
+                [style]="{ width: '100%' }"
+              ></p-slider>
+              <div class="text-sm text-gray-600 mt-2">
+                Valeur :
+                <strong>{{ formGroup.get('produitDetails.long_terme.montantInvesti')?.value }} €</strong>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="pension-age" class="block text-sm font-medium text-gray-700 mb-1">Âge</label>
+              <p-inputNumber
+                id="pension-age"
+                formControlName="age"
+                [showButtons]="true"
+                [min]="18"
+                [max]="65"
                 class="w-full"
                 [inputStyleClass]="'w-full'"
               ></p-inputNumber>
             </div>
 
             <div class="mb-4">
-              <label for="longterme-duree" class="block text-sm font-medium text-gray-700 mb-1">Durée (années)</label>
-              <p-inputNumber
-                id="longterme-duree"
-                formControlName="duree"
-                [showButtons]="true"
-                [min]="1"
-                [max]="40"
-                class="w-full"
-                [inputStyleClass]="'w-full'"
-              ></p-inputNumber>
+              <label for="pension-branche" class="block text-sm font-medium text-gray-700 mb-1">Branche</label>
+              <div class="flex items-center gap-4" id="pension-branche">
+                <p-radioButton name="longTermeBranche"  [inputId]="'pension-branche21'" value="21" formControlName="longTermeBranche"></p-radioButton>
+                <label for="pension-branche21">Branche 21</label>
+
+                <p-radioButton name="longTermeBranche"  [inputId]="'pension-branche23'" value="23" formControlName="longTermeBranche"></p-radioButton>
+                <label for="pension-branche23">Branche 23</label>
+              </div>
             </div>
 
-            <div class="mb-4">
-              <label for="longterme-taux" class="block text-sm font-medium text-gray-700 mb-1">Taux d'intérêt (%)</label>
-              <p-inputNumber
-                id="longterme-taux"
-                formControlName="tauxInteret"
-                [showButtons]="true"
-                [min]="0"
-                [max]="10"
-                [minFractionDigits]="2"
-                [maxFractionDigits]="2"
-                class="w-full"
-                [inputStyleClass]="'w-full'"
-              ></p-inputNumber>
-            </div>
-
-            <div class="mb-4">
-              <label for="longterme-mensuel" class="block text-sm font-medium text-gray-700 mb-1">Versement mensuel</label>
-              <p-inputNumber
-                id="longterme-mensuel"
-                formControlName="versementMensuel"
-                [showButtons]="true"
-                [min]="0"
-                [max]="10000"
-                mode="currency"
-                currency="EUR"
-                class="w-full"
-                [inputStyleClass]="'w-full'"
-              ></p-inputNumber>
+            <div class="mb-4 flex items-center">
+              <p-checkbox
+                id="pension-regime"
+                formControlName="regimeSpecial"
+                [binary]="true"
+                class="mr-2"
+              ></p-checkbox>
+              <label for="pension-regime" class="text-sm font-medium text-gray-700">Régime spécial</label>
             </div>
           </div>
         </p-accordionTab>
@@ -147,43 +135,52 @@
         <p-accordionTab header="📊 PCLS">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
             <div class="mb-4">
-              <label for="pcls-montant" class="block text-sm font-medium text-gray-700 mb-1">Montant actuel</label>
-              <p-inputNumber
-                id="pcls-montant"
-                formControlName="montantActuel"
-                [showButtons]="true"
-                [min]="0"
-                [max]="1000000"
-                mode="currency"
-                currency="EUR"
-                class="w-full"
-                [inputStyleClass]="'w-full'"
-              ></p-inputNumber>
-            </div>
-
-            <div class="mb-4">
-              <label for="pcls-annees" class="block text-sm font-medium text-gray-700 mb-1">Années avant retraite</label>
-              <p-inputNumber
-                id="pcls-annees"
-                formControlName="anneeAvantRetraite"
-                [showButtons]="true"
-                [min]="1"
-                [max]="40"
-                class="w-full"
-                [inputStyleClass]="'w-full'"
-              ></p-inputNumber>
-            </div>
-
-            <div class="mb-4">
-              <label for="pcls-pourcentage" class="block text-sm font-medium text-gray-700 mb-1">Pourcentage retraite (%)</label>
+              <label class="block mb-2 text-gray-700 font-medium">Montant investi (€)</label>
               <p-slider
-                id="pcls-pourcentage"
-                formControlName="pourcentageRetraite"
+                formControlName="montantInvesti"
                 [min]="0"
-                [max]="100"
-                class="w-full mt-2"
+                [max]="1380"
+                [step]="10"
+                [style]="{ width: '100%' }"
               ></p-slider>
-              <div class="text-center mt-1">{{ formGroup.get('produitDetails')?.get('pcls')?.get('pourcentageRetraite')?.value }}%</div>
+              <div class="text-sm text-gray-600 mt-2">
+                Valeur :
+                <strong>{{ formGroup.get('produitDetails.pcls.montantInvesti')?.value }} €</strong>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="pension-age" class="block text-sm font-medium text-gray-700 mb-1">Âge</label>
+              <p-inputNumber
+                id="pension-age"
+                formControlName="age"
+                [showButtons]="true"
+                [min]="18"
+                [max]="65"
+                class="w-full"
+                [inputStyleClass]="'w-full'"
+              ></p-inputNumber>
+            </div>
+
+            <div class="mb-4">
+              <label for="pension-branche" class="block text-sm font-medium text-gray-700 mb-1">Branche</label>
+              <div class="flex items-center gap-4" id="pension-branche">
+                <p-radioButton name="pclsBranche"  [inputId]="'pension-branche21'" value="21" formControlName="pclsBranche"></p-radioButton>
+                <label for="pension-branche21">Branche 21</label>
+
+                <p-radioButton name="pclsBranche"  [inputId]="'pension-branche23'" value="23" formControlName="pclsBranche"></p-radioButton>
+                <label for="pension-branche23">Branche 23</label>
+              </div>
+            </div>
+
+            <div class="mb-4 flex items-center">
+              <p-checkbox
+                id="pension-regime"
+                formControlName="regimeSpecial"
+                [binary]="true"
+                class="mr-2"
+              ></p-checkbox>
+              <label for="pension-regime" class="text-sm font-medium text-gray-700">Régime spécial</label>
             </div>
           </div>
         </p-accordionTab>

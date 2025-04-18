@@ -69,19 +69,20 @@ export class ProduitEpargneComponent implements OnInit {
         pension: this.fb.group({
           montantInvesti: [5000, [Validators.required, Validators.min(0)]],
           age: [30, [Validators.required, Validators.min(18), Validators.max(65)]],
-          branche: ['finance', Validators.required],
+          pensionBranche: ['finance', Validators.required],
           regimeSpecial: [false]
         }),
         long_terme: this.fb.group({
-          montantInvesti: [10000, [Validators.required, Validators.min(0)]],
-          duree: [10, [Validators.required, Validators.min(1)]],
-          tauxInteret: [3.5, [Validators.required, Validators.min(0)]],
-          versementMensuel: [100, [Validators.required, Validators.min(0)]]
+          montantInvesti: [5000, [Validators.required, Validators.min(0)]],
+          age: [30, [Validators.required, Validators.min(18), Validators.max(65)]],
+          longTermeBranche: ['finance', Validators.required],
+          regimeSpecial: [false]
         }),
         pcls: this.fb.group({
-          montantActuel: [50000, [Validators.required, Validators.min(0)]],
-          anneeAvantRetraite: [15, [Validators.required, Validators.min(1)]],
-          pourcentageRetraite: [25, [Validators.required, Validators.min(0), Validators.max(100)]]
+          montantInvesti: [5000, [Validators.required, Validators.min(0)]],
+          age: [30, [Validators.required, Validators.min(18), Validators.max(65)]],
+          pclsBranche: ['finance', Validators.required],
+          regimeSpecial: [false]
         })
       })
     });
