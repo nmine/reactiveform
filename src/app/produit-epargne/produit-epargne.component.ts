@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 
 // PrimeNG Components
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { CheckboxModule } from 'primeng/checkbox';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
-import { PanelModule } from 'primeng/panel';
-import { SliderModule } from 'primeng/slider';
-import { AccordionModule } from 'primeng/accordion';
+import {ButtonModule} from 'primeng/button';
+import {CardModule} from 'primeng/card';
+import {CheckboxModule} from 'primeng/checkbox';
+import {DropdownModule} from 'primeng/dropdown';
+import {InputNumberModule} from 'primeng/inputnumber';
+import {InputTextModule} from 'primeng/inputtext';
+import {PanelModule} from 'primeng/panel';
+import {SliderModule} from 'primeng/slider';
+import {AccordionModule} from 'primeng/accordion';
 import {RadioButton} from 'primeng/radiobutton';
+import {SimulationDTO} from './simulation.dto';
+import {SimulatePensionSavingsUseCase} from './application/use-cases/simulate-pension-savings.usecase';
 
 @Component({
   selector: 'app-produit-epargne',
@@ -41,22 +43,23 @@ export class ProduitEpargneComponent implements OnInit {
 
   // Product types
   produits = [
-    { id: 'pension', name: 'Epargne pension', icon: '💰' },
-    { id: 'long_terme', name: 'Epargne long terme', icon: '🏛️' },
-    { id: 'pcls', name: 'PCLS', icon: '📊' }
+    {id: 'pension', name: 'Epargne pension', icon: '💰'},
+    {id: 'long_terme', name: 'Epargne long terme', icon: '🏛️'},
+    {id: 'pcls', name: 'PCLS', icon: '📊'}
   ];
 
   // Dropdown options for sectors
   branches = [
-    { label: '21', value: '21' },
-    { label: '23', value: '23' }
+    {label: '21', value: '21'},
+    {label: '23', value: '23'}
   ];
 
   // Calculate summary data
   avantageFiscal: number = 0;
   capitalEstime: number = 0;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -159,33 +162,49 @@ export class ProduitEpargneComponent implements OnInit {
 
       switch (produitId) {
         case 'pension':
-          this.avantageFiscal += details.montantInvesti * 12 * this.getRendement(details.montantInvesti) * 65 - details.age; // 30% tax advantage
-          this.capitalEstime += details.montantInvesti * Math.pow(1.04, 65 - details.age); // 4% annual return until 65
+          const useCase = new SimulatePensionSavingsUseCase();
+          const dto: SimulationDTO = {
+            age: details.age,
+            investmentAmount: details.montantInvesti,
+            branch: details.branch,
+            specialRegime: details.regimeSpecial
+          };
+
+          const result = useCase.execute(dto);
+
+          //this.avantageFiscal += details.montantInvesti * 12 * this.getRendement(details.montantInvesti) * 65 - details.age; // 30% tax advantage
+          //this.capitalEstime += details.montantInvesti * Math.pow(1.04, 65 - details.age); // 4% annual return until 65
+          this.avantageFiscal = result.taxBenefit.amount;
+          this.capitalEstime = result.retirementCapital.amount;
           break;
 
         case 'long_terme':
-          this.avantageFiscal += details.montantInvesti * 0.2; // 20% tax advantage
-          // Initial investment + monthly payments with interest
-          const monthlyRate = details.tauxInteret / 100 / 12;
-          const months = details.duree * 12;
-          this.capitalEstime += details.montantInvesti * Math.pow(1 + monthlyRate, months);
-          this.capitalEstime += details.versementMensuel * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
-          break;
+        /* this.avantageFiscal += details.montantInvesti * 0.2; // 20% tax advantage
+        // Initial investment + monthly payments with interest
+        const monthlyRate = details.tauxInteret / 100 / 12;
+        const months = details.duree * 12;
+        this.capitalEstime += details.montantInvesti * Math.pow(1 + monthlyRate, months);
+        this.capitalEstime += details.versementMensuel * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+        break;
+
+         */
 
         case 'pcls':
-          // No tax advantage for PCLS
-          this.capitalEstime += details.montantActuel * Math.pow(1.035, details.anneeAvantRetraite);
-          this.capitalEstime *= details.pourcentageRetraite / 100; // Apply retirement percentage
-          break;
+        /*
+        // No tax advantage for PCLS
+        this.capitalEstime += details.montantActuel * Math.pow(1.035, details.anneeAvantRetraite);
+        this.capitalEstime *= details.pourcentageRetraite / 100; // Apply retirement percentage
+        break;
+         */
       }
     }
 
-    // Round to 2 decimal places
+// Round to 2 decimal places
     this.avantageFiscal = Math.round(this.avantageFiscal);
     this.capitalEstime = Math.round(this.capitalEstime);
   }
 
-  private getRendement(montantInvesti : number): number {
+  private getRendement(montantInvesti: number): number {
     return montantInvesti < 1050 ? 0.3 : 0.25;
   }
 }
