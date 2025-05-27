@@ -9,7 +9,7 @@ export class Age {
     return this.value;
   }
 
-  get yearsUntilRetirement(): number {
+  get dureeAvant65(): number {
     return 65 - this.value;
   }
 }

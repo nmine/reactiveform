@@ -1,13 +1,13 @@
-import {SimulatePensionSavingsUseCase} from '../simulate-pension-savings.usecase';
-import {SimulationDTO} from '../../../simulation.dto';
+import {SimulateEpargnePensionUseCase} from '../simulate-epargne-pension-use.case';
+import {SimulationInputDTO} from '../simulationInputDTO';
 
 describe('SimulatePensionSavingsUseCase', () => {
   it('should calculate the correct tax benefit and retirement capital', () => {
-    const useCase = new SimulatePensionSavingsUseCase();
+    const useCase = new SimulateEpargnePensionUseCase();
 
-    const dto: SimulationDTO = {
+    const dto: SimulationInputDTO = {
       age: 40,
-      investmentAmount: 1000,
+      primeMensuelle: 1000,
       branch: '21',
       specialRegime: false
     };

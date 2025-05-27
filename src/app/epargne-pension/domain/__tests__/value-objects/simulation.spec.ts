@@ -1,4 +1,4 @@
-import { Simulation } from '../../value-objects/simulation';
+import { Simulation } from '../../value-objects/simulation.epargne-pension';
 import { Age } from '../../value-objects/age';
 import { InvestmentAmount } from '../../value-objects/investment-amount';
 import { Branch } from '../../value-objects/branch';
@@ -12,7 +12,7 @@ describe('Simulation', () => {
     const simulation = new Simulation(age, investment, branch, true);
 
     expect(simulation.age.valueInYears).toBe(35);
-    expect(simulation.investmentAmount.amount).toBe(1200);
+    expect(simulation.primeMensuelle.amount).toBe(1200);
     expect(simulation.branch.code).toBe('21');
   });
 });

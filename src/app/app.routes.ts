@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { FormsDemoComponent } from './forms-demo/forms-demo.component';
-import { ProduitEpargneComponent } from './produit-epargne/produit-epargne.component';
+import { ProduitEpargneComponent } from './epargne-pension/produit-epargne.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'forms', pathMatch: 'full' }, // Redirige la page principale vers /forms

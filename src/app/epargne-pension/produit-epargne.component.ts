@@ -13,8 +13,8 @@ import {PanelModule} from 'primeng/panel';
 import {SliderModule} from 'primeng/slider';
 import {AccordionModule} from 'primeng/accordion';
 import {RadioButton} from 'primeng/radiobutton';
-import {SimulationDTO} from './simulation.dto';
-import {SimulatePensionSavingsUseCase} from './application/use-cases/simulate-pension-savings.usecase';
+import {SimulationInputDTO} from './application/use-cases/simulationInputDTO';
+import {SimulateEpargnePensionUseCase} from './application/use-cases/simulate-epargne-pension-use.case';
 
 @Component({
   selector: 'app-produit-epargne',
@@ -105,7 +105,6 @@ export class ProduitEpargneComponent implements OnInit {
   updateValidators(selectedProducts: string[]): void {
     const produitDetails = this.formGroup.get('produitDetails') as FormGroup;
 
-    // Reset all validators
     for (const produit of this.produits) {
       const produitGroup = produitDetails.get(produit.id) as FormGroup;
       if (produitGroup) {
@@ -116,7 +115,6 @@ export class ProduitEpargneComponent implements OnInit {
       }
     }
 
-    // Set validators for selected products
     for (const produitId of selectedProducts) {
       const produitGroup = produitDetails.get(produitId) as FormGroup;
       if (produitGroup) {
@@ -130,7 +128,6 @@ export class ProduitEpargneComponent implements OnInit {
     }
   }
 
-  // Toggle product selection
   toggleProduit(produitId: string): void {
     const currentSelection = [...this.formGroup.get('selectedProduits')?.value || []];
     const index = currentSelection.indexOf(produitId);
@@ -144,7 +141,6 @@ export class ProduitEpargneComponent implements OnInit {
     this.formGroup.get('selectedProduits')?.setValue(currentSelection);
   }
 
-  // Check if a product is selected
   isProduitSelected(produitId: string): boolean {
     return (this.formGroup.get('selectedProduits')?.value || []).includes(produitId);
   }
@@ -162,40 +158,23 @@ export class ProduitEpargneComponent implements OnInit {
 
       switch (produitId) {
         case 'pension':
-          const useCase = new SimulatePensionSavingsUseCase();
-          const dto: SimulationDTO = {
+          const useCase = new SimulateEpargnePensionUseCase();
+          const dto: SimulationInputDTO = {
             age: details.age,
-            investmentAmount: details.montantInvesti,
+            primeMensuelle: details.montantInvesti,
             branch: details.branch,
             specialRegime: details.regimeSpecial
           };
 
           const result = useCase.execute(dto);
 
-          //this.avantageFiscal += details.montantInvesti * 12 * this.getRendement(details.montantInvesti) * 65 - details.age; // 30% tax advantage
-          //this.capitalEstime += details.montantInvesti * Math.pow(1.04, 65 - details.age); // 4% annual return until 65
           this.avantageFiscal = result.taxBenefit.amount;
           this.capitalEstime = result.retirementCapital.amount;
           break;
 
         case 'long_terme':
-        /* this.avantageFiscal += details.montantInvesti * 0.2; // 20% tax advantage
-        // Initial investment + monthly payments with interest
-        const monthlyRate = details.tauxInteret / 100 / 12;
-        const months = details.duree * 12;
-        this.capitalEstime += details.montantInvesti * Math.pow(1 + monthlyRate, months);
-        this.capitalEstime += details.versementMensuel * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
-        break;
-
-         */
 
         case 'pcls':
-        /*
-        // No tax advantage for PCLS
-        this.capitalEstime += details.montantActuel * Math.pow(1.035, details.anneeAvantRetraite);
-        this.capitalEstime *= details.pourcentageRetraite / 100; // Apply retirement percentage
-        break;
-         */
       }
     }
 
