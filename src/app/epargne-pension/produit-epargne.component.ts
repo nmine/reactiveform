@@ -15,6 +15,7 @@ import {AccordionModule} from 'primeng/accordion';
 import {RadioButton} from 'primeng/radiobutton';
 import {SimulateEpargnePensionQuery} from './application/use-cases/simulateEpargnePensionQuery';
 import {SimulateEpargnePensionUseCase} from './application/use-cases/simulate-epargne-pension-use.case';
+import {Age} from './domain/value-objects/age';
 
 @Component({
   selector: 'app-produit-epargne',
@@ -160,7 +161,7 @@ export class ProduitEpargneComponent implements OnInit {
         case 'pension':
           const useCase = new SimulateEpargnePensionUseCase();
           const dto: SimulateEpargnePensionQuery = {
-            age: details.age,
+            age: new Age(details.age),
             primeMensuelle: details.montantInvesti,
             branch: details.branch,
             specialRegime: details.regimeSpecial
