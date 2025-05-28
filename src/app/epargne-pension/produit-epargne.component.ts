@@ -13,7 +13,7 @@ import {PanelModule} from 'primeng/panel';
 import {SliderModule} from 'primeng/slider';
 import {AccordionModule} from 'primeng/accordion';
 import {RadioButton} from 'primeng/radiobutton';
-import {SimulationInputDTO} from './application/use-cases/simulationInputDTO';
+import {SimulateEpargnePensionQuery} from './application/use-cases/simulateEpargnePensionQuery';
 import {SimulateEpargnePensionUseCase} from './application/use-cases/simulate-epargne-pension-use.case';
 
 @Component({
@@ -159,7 +159,7 @@ export class ProduitEpargneComponent implements OnInit {
       switch (produitId) {
         case 'pension':
           const useCase = new SimulateEpargnePensionUseCase();
-          const dto: SimulationInputDTO = {
+          const dto: SimulateEpargnePensionQuery = {
             age: details.age,
             primeMensuelle: details.montantInvesti,
             branch: details.branch,
@@ -168,8 +168,8 @@ export class ProduitEpargneComponent implements OnInit {
 
           const result = useCase.execute(dto);
 
-          this.avantageFiscal = result.taxBenefit.amount;
-          this.capitalEstime = result.retirementCapital.amount;
+          this.avantageFiscal = result.avantageFiscal;
+          this.capitalEstime = result.capitalFinal;
           break;
 
         case 'long_terme':
