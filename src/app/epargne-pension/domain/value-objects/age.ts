@@ -10,6 +10,6 @@ export class Age {
   }
 
   get dureeAvant65(): number {
-    return 65 - this.value;
+    return 65*12 - this.value*12;
   }
 }
